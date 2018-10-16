@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bbg.pojo.PCursor;
 
@@ -27,7 +28,7 @@ import com.bbg.pojo.PCursor;
 
 @Controller
 @Service
-public class Syn_LP_REAL_BFXS_HZ {
+public class Syn_LP_REAL_BFXS_HZ  {
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -35,6 +36,7 @@ public class Syn_LP_REAL_BFXS_HZ {
 	/*
 	 * 实时报表  数据刷新
 	 * */
+	@Transactional(value="bhbiTransactionManager")
 	public void beginDeal() throws IOException{
 		//获取日结时间(当日时间为日结时间+1天)
 		String time  = getRclTime();
@@ -70,8 +72,8 @@ public class Syn_LP_REAL_BFXS_HZ {
 	 * */
 	public void deleteData(String time){
 		String sql = " Truncate  table  LP_REAL_BFXS_REALTIME ";
-		//String sql2 = " DELETE FROM  LP_REAL_BFXS_HZ WHERE JZRQ >= TO_DATE('"+time+"','yyyymmdd') ";//正式
-		String sql2 = " DELETE FROM  LP_REAL_BFXS_HZ_TEST WHERE JZRQ >= TO_DATE('"+time+"','yyyymmdd') ";//测试
+		String sql2 = " DELETE FROM  LP_REAL_BFXS_HZ WHERE JZRQ >= TO_DATE('"+time+"','yyyymmdd') ";//正式
+		//String sql2 = " DELETE FROM  LP_REAL_BFXS_HZ_TEST WHERE JZRQ >= TO_DATE('"+time+"','yyyymmdd') ";//测试
 		
 		jdbcTemplate.execute(sql);
 		jdbcTemplate.execute(sql2);
@@ -237,7 +239,7 @@ public class Syn_LP_REAL_BFXS_HZ {
 				ps.setInt(8, res.get(i).getXsbs());
 				ps.setDouble(9, res.get(i).getYhje());
 				ps.setInt(10, res.get(i).getXssl());
-				ps.setDouble(11,res.get(i).getHybs() );
+				ps.setDouble(11,res.get(i).getXsje_hy() );
 				ps.setDouble(12, res.get(i).getYhje_hy());
 				ps.setInt(13,  res.get(i).getHybs());
 				ps.setDouble(14, res.get(i).getXsml());
@@ -258,7 +260,7 @@ public class Syn_LP_REAL_BFXS_HZ {
 	
 public void insertInto_LP_REAL_BFXS_HZ(String strDate){
 		//正式
-		/*String sql = 
+		String sql = 
 				"INSERT INTO LP_REAL_BFXS_HZ(JZRQ,SPCODE,NAME,XSSD1,XSSD2,XSBS,XSJE,YHJE,XSSL,HYXS,YHJE_HY,HYBS,"
 				+ "DL,DLNAME,ZL,ZLNAME,XL, XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,SHOPID,SHOPNAME,XSML)  "
 				+"SELECT JZRQ,SPCODE,NAME,XSSD1,XSSD2,SUM(XSBS) XSBS,SUM(XSJE) XSJE,SUM(YHJE) YHJE,SUM(XSSL) XSSL,"
@@ -271,9 +273,9 @@ public void insertInto_LP_REAL_BFXS_HZ(String strDate){
 				+ "XSDD@BFDB S,MCDEF_LP@BFDB P ,BH_PL_PZ K WHERE A.DEPTID = D.DEPTID AND A.SP_ID = B.SP_ID AND "
 				+ "D.XSDDID = S.XSDDID AND SUBSTR(D.BMDM,1,4)=P.BMDM AND SUBSTR(B.SPFL,1,6) = K.XL AND "
 				+ "A.JZRQ = TO_DATE('"+strDate+"','yyyy/mm/dd') ) GROUP BY JZRQ,SPCODE,NAME,XSSD1,XSSD2,DL,DLNAME,ZL,"
-				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";*/
+				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";
 	    //测试
-		String sql = 
+		/*String sql = 
 				"INSERT INTO LP_REAL_BFXS_HZ_TEST(JZRQ,SPCODE,NAME,XSSD1,XSSD2,XSBS,XSJE,YHJE,XSSL,HYXS,YHJE_HY,HYBS,"
 				+ "DL,DLNAME,ZL,ZLNAME,XL, XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,SHOPID,SHOPNAME,XSML)  "
 				+"SELECT JZRQ,SPCODE,NAME,XSSD1,XSSD2,SUM(XSBS) XSBS,SUM(XSJE) XSJE,SUM(YHJE) YHJE,SUM(XSSL) XSSL,"
@@ -286,7 +288,7 @@ public void insertInto_LP_REAL_BFXS_HZ(String strDate){
 				+ "XSDD@BFDB S,MCDEF_LP@BFDB P ,BH_PL_PZ K WHERE A.DEPTID = D.DEPTID AND A.SP_ID = B.SP_ID AND "
 				+ "D.XSDDID = S.XSDDID AND SUBSTR(D.BMDM,1,4)=P.BMDM AND SUBSTR(B.SPFL,1,6) = K.XL AND "
 				+ "A.JZRQ = TO_DATE('"+strDate+"','yyyy/mm/dd') ) GROUP BY JZRQ,SPCODE,NAME,XSSD1,XSSD2,DL,DLNAME,ZL,"
-				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";
+				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";*/
 		jdbcTemplate.execute(sql);
 	}
 	

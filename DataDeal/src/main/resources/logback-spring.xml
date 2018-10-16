@@ -5,15 +5,20 @@
 	<property name="PATTERN"
 		value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
 	<!-- pro文件路径 -->
-	<property name="PRO_FILE_PATH" value="C:/syn_LP_REAL_BFXS_HZ_LOG/log" />
+	<property name="PRO_FILE_PATH" value="C:/syn_LP_REAL_BFXS_HZ_LOG" />
 
 	
-	<appender name="TOFILE" class="ch.qos.logback.core.FileAppender"> 
-　　　　　　　　<file>${PRO_FILE_PATH}</file> 
-　　　　　　　　<append>true</append> 
+	<appender name="TOFILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
+　　　　　　　　<!-- <file>${PRO_FILE_PATH}</file> 
+　　　　　　　　<append>true</append>  -->
 　　　　　　　　<encoder> 
 　　　　　　　　　　<pattern>${PATTERN}</pattern> 
 　　　　　　　　</encoder> 
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>C:/syn_LP_REAL_BFXS_HZ_LOG/info.%d.log</fileNamePattern>
+        </rollingPolicy>
+
 　　　</appender> 
 
 	<appender name="TOCONSOLE" class="ch.qos.logback.core.ConsoleAppender">

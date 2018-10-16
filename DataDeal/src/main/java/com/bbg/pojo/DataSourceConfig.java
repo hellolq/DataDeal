@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class DataSourceConfig {
@@ -34,6 +36,11 @@ public class DataSourceConfig {
 	public JdbcTemplate mobiJdbcTemplate(@Qualifier("mobi") DataSource dataSource){
 		return new JdbcTemplate(dataSource);
 	}
+	
+	@Bean
+    public PlatformTransactionManager bhbiTransactionManager(@Qualifier("bhbi")DataSource prodDataSource) {
+     return new DataSourceTransactionManager(prodDataSource);
+    }
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.bbg.bhbi.service.Push_bh_exception_data;
+import com.bbg.bhbi.service.Push_bh_exception_data_new;
 import com.bbg.bhbi.service.Syn_LP_REAL_BFXS_HZ;
 import com.bbg.pojo.BbgBhExceptionOne;
 import com.bbg.pojo.BbgBhExceptionTwo;
@@ -25,15 +26,16 @@ public class AllTest {
 	private static ExecutorService es = Executors.newFixedThreadPool(20);
 	
 	@Autowired
-	Push_bh_exception_data push_bh_exception_data;
+	Push_bh_exception_data_new push_bh_exception_data_new;
 	
 
 	
 	@Test
 	public void test() throws Exception {
-		 
-		  push_bh_exception_data.insertRK_RISK_INTERFACE();
-		
+		 //ObjectMapper mapper = new ObjectMapper();
+		 push_bh_exception_data_new.insertRK_RISK_INTERFACE();
+		/*List<RK_RISK_INTERFACE> res = push_bh_exception_data_new.getRK_RISK_INTERFACE();
+		System.out.println(mapper.writeValueAsString(res));*/
 		System.out.println("over");
 	}
 	

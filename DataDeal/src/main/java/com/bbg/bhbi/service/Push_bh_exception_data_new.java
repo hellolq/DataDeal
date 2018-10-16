@@ -28,7 +28,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @Service
-public class Push_bh_exception_data {
+public class Push_bh_exception_data_new {
+	
+	/*
+	 * Push_bh_exception_data 同一类别下的同一类型插入一次
+	 * 经过与郑巧伟确定
+	 * 修改为 同一类别下的异常打包成一条记录 即为 ：Push_bh_exception_data_new
+	 * Push_bh_exception_data 暂时保留，项目正式结束后清理
+	 * */
 	
 	@Autowired
 	JdbcTemplate mobiJdbcTemplate;
@@ -88,18 +95,21 @@ public class Push_bh_exception_data {
 		for(int i=0;i<shops.size();i++){
 			String shop_temp = shops.get(i);
 			List<BbgBhExceptionThree> res_three =  getBbgBhExceptionThreeList(time, shop_temp);
+			RK_RISK_INTERFACE res_obj = new RK_RISK_INTERFACE();
+			//BbgBhExceptionTwo bbgBhExceptionTwo = new BbgBhExceptionTwo();
+			List<BbgBhExceptionTwo> bbgBhExceptionTwos = new ArrayList<>();
 			for(int j=0;j<res_jf.size();j++){
-				RK_RISK_INTERFACE res_obj = new RK_RISK_INTERFACE();
 				Jf_Exception temp_jf = res_jf.get(j);
 				BbgBhExceptionTwo bbgBhExceptionTwo = getBbgBhExceptionTwo(res_three, temp_jf, exp_type, shop_temp, time);
-				res_obj.setLevel_id("1");
-				res_obj.setClass_id("1");
-				res_obj.setRisk_type_id(temp_jf.getId());
-				res_obj.setOrg_id(shop_temp);
-				res_obj.setSource_id("bh_"+shop_temp);
-				res_obj.setContent(mapper.writeValueAsString(bbgBhExceptionTwo));
-				res.add(res_obj);
+				bbgBhExceptionTwos.add(bbgBhExceptionTwo);
 			}
+			res_obj.setLevel_id("1");
+			res_obj.setClass_id("1");
+			res_obj.setRisk_type_id("");
+			res_obj.setOrg_id(shop_temp);
+			res_obj.setSource_id("bh_"+shop_temp);
+			res_obj.setContent(mapper.writeValueAsString(bbgBhExceptionTwos));
+			res.add(res_obj);
 		}
 		
 		return res;
@@ -136,9 +146,9 @@ public class Push_bh_exception_data {
 	public List<String> getShopList(){
 		List<String> shops = new ArrayList<>();
 		shops.add("012018");
-		/*shops.add("012823");
+		shops.add("012823");
 		shops.add("012824");
-		shops.add("012825");*/
+		shops.add("012825");
 		
 		return shops;
 	}
@@ -226,10 +236,9 @@ public class Push_bh_exception_data {
 		 
 		 for(int i=0;i<res_source.size();i++){
 			 BbgBhExceptionThree temp_three = res_source.get(i);
-			 /*if(temp_three.getExceptionType().equals(jf_Exception.getId())){
+			 if(temp_three.getExceptionType().equals(jf_Exception.getId())){
 				 res_two.add(temp_three);
-			 }*/
-			 res_two.add(temp_three);
+			 }
 		 }
 		
 		 result.setData(res_two);
