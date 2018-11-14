@@ -8,6 +8,7 @@ import java.util.Map;
 public class BbgBhExceptionTwo {
 	
 	private String subject;//异常标题
+	private String riskTypeId;//异常类型小类
 	private String riskDesc;//异常描述
 	private String sourceObjType;//原对象类型ID
 	private String sourceObjId;//原对象ID
@@ -17,6 +18,13 @@ public class BbgBhExceptionTwo {
 	private Map<String,String> gridSchema = new HashMap<>();//要展示的字段
 	private List<BbgBhExceptionThree> data = new ArrayList<>();//数据源
 	
+	
+	public String getRiskTypeId() {
+		return riskTypeId;
+	}
+	public void setRiskTypeId(String riskTypeId) {
+		this.riskTypeId = riskTypeId;
+	}
 	public String getSubject() {
 		return subject;
 	}

@@ -93,6 +93,7 @@ public class Push_bh_exception_data_new {
 		List<Jf_Exception> res_jf =  getJfException_type();
 		
 		for(int i=0;i<shops.size();i++){
+
 			String shop_temp = shops.get(i);
 			List<BbgBhExceptionThree> res_three =  getBbgBhExceptionThreeList(time, shop_temp);
 			RK_RISK_INTERFACE res_obj = new RK_RISK_INTERFACE();
@@ -100,11 +101,13 @@ public class Push_bh_exception_data_new {
 			List<BbgBhExceptionTwo> bbgBhExceptionTwos = new ArrayList<>();
 			for(int j=0;j<res_jf.size();j++){
 				Jf_Exception temp_jf = res_jf.get(j);
+				
 				BbgBhExceptionTwo bbgBhExceptionTwo = getBbgBhExceptionTwo(res_three, temp_jf, exp_type, shop_temp, time);
 				bbgBhExceptionTwos.add(bbgBhExceptionTwo);
 			}
+			res_obj.setStatus("0");
 			res_obj.setLevel_id("1");
-			res_obj.setClass_id("1");
+			res_obj.setClass_id("47");
 			res_obj.setRisk_type_id("");
 			res_obj.setOrg_id(shop_temp);
 			res_obj.setSource_id("bh_"+shop_temp);
@@ -159,7 +162,7 @@ public class Push_bh_exception_data_new {
 	 * */
 	public List<Jf_Exception> getJfException_type(){
 		final List<Jf_Exception> res = new ArrayList<>();
-		String sql = " select id,notes from LP_YCFXSM@BFDB ";
+		String sql = " select id,notes,jtyc_id from LP_YCFXSM ";
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 
 			@Override
@@ -167,6 +170,7 @@ public class Push_bh_exception_data_new {
 				Jf_Exception model = new Jf_Exception();
 				model.setId(rs.getString("id"));
 				model.setNote(rs.getString("notes"));
+				model.setJtyc_id(rs.getString("jtyc_id"));
 				res.add(model);
 			}
 		});
@@ -228,6 +232,7 @@ public class Push_bh_exception_data_new {
 		List<BbgBhExceptionThree> res_two = new ArrayList<>();
 		 result.setSubject(shopId+"_"+exp_type+"_"+jf_Exception.getId());
 		 result.setRiskDesc(jf_Exception.getNote());
+		 result.setRiskTypeId(jf_Exception.getJtyc_id());
 		 result.setSourceObjType("bh_"+shopId);
 		 result.setSourceObjId("bh_"+shopId+"_"+"000000");
 		 result.setHappenTimeStr(time);

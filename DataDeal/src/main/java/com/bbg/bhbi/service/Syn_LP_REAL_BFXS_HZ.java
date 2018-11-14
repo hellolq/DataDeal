@@ -171,6 +171,52 @@ public class Syn_LP_REAL_BFXS_HZ  {
 				.floor((v_JYSJ - 100 * Math.floor(v_JYSJ / 100)) / 30) * 30);
 
 		if (v_XSSD1 == 0) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 30) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 100) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 130) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 200) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 230) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 300) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 330) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 400) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 430) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 500) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 530) {
+			v_XSSD1 = 0630;
+		} else if (v_XSSD1 == 600) {
+			v_XSSD1 = 0600;
+		} else if (v_XSSD1 == 630) {
+			v_XSSD1 = 0600;
+		}
+
+		int v_XSSD2 = v_XSSD1 + 30;
+
+		if ((v_XSSD2 - 100 * Math.floor(v_XSSD2 / 100)) == 60) {
+			v_XSSD2 = (int) ((1 + Math.floor(v_XSSD2 / 100)) * 100);
+		}
+		v_XSSD[0] = v_XSSD1;
+		v_XSSD[1] = v_XSSD2;
+		return v_XSSD;
+	}
+	
+	/*
+	public int[] getV_XSSD(int v_JYSJ) {
+		int[] v_XSSD = new int[2];
+		int v_XSSD1 = (int) (100 * Math.floor(v_JYSJ / 100) + Math
+				.floor((v_JYSJ - 100 * Math.floor(v_JYSJ / 100)) / 30) * 30);
+
+		if (v_XSSD1 == 0) {
 			v_XSSD1 = 2400;
 		} else if (v_XSSD1 == 30) {
 			v_XSSD1 = 2430;
@@ -208,7 +254,7 @@ public class Syn_LP_REAL_BFXS_HZ  {
 		v_XSSD[0] = v_XSSD1;
 		v_XSSD[1] = v_XSSD2;
 		return v_XSSD;
-	}
+	}*/
 	
 	/*
 	 * 插入实时临时表      LP_REAL_BFXS_REALTIME
@@ -259,8 +305,23 @@ public class Syn_LP_REAL_BFXS_HZ  {
 	 * */
 	
 public void insertInto_LP_REAL_BFXS_HZ(String strDate){
+	    //20181023 新版语句 增加4个字段
+	String sql = " INSERT INTO LP_REAL_BFXS_HZ(JZRQ,SPCODE,NAME,XSSD1,XSSD2,XSBS,XSJE,YHJE,XSSL,HYXS,YHJE_HY,HYBS, DL,"
+    		+ " DLNAME,ZL,ZLNAME,XL, XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,SHOPID,SHOPNAME,XSML,GHDWDM,GYSZZ,SBID,HTH) SELECT "
+    		+ " JZRQ,SPCODE,NAME,XSSD1,XSSD2,SUM(XSBS) XSBS,SUM(XSJE) XSJE,SUM(YHJE) YHJE,SUM(XSSL) XSSL, SUM(HYXS) HYXS,"
+    		+ " SUM(YHJE_HY) YHJE_HY, SUM(HYBS) HYBS, DL,DLNAME,ZL,ZLNAME,XL,XLNAME,BMDM,DEPT_NAME, XSDD,XSDDMC,OLD_MCID,"
+    		+ " MCNAME,SUM(XSML) XSML, CODE AS GHDWDM,XSNR AS GYSZZ,SB AS SBID,HTH FROM ( SELECT jzrq,A.deptid,A.hth,xssd1,"
+    		+ " A.sp_id,xssd2,xsbs,xsje,yhje, xssl,hyxs,yhje_hy,hybs, D.BMDM AS BMDM, DEPT_NAME, B.SPCODE AS SPCODE,"
+    		+ " B.NAME AS NAME, SUBSTR(B.SPFL,1,2) AS DL,K.DLNAME AS DLNAME, SUBSTR(B.SPFL,1,4) AS ZL,K.ZLNAME AS ZLNAME, "
+    		+ " SUBSTR(B.SPFL,1,6) AS XL,K.XLNAME AS XLNAME, SUBSTR(S.XSDDDM,1,6) AS XSDD, XSDDMC, p.OLD_MCID AS OLD_MCID,"
+    		+ " P.NAME AS MCNAME,XSML , W.CODE, (SELECT XSNR FROM WLDW_SXDY@BFDB Y WHERE W.QYLX = Y.SXID(+)) XSNR, B.SB "
+    		+ " FROM LP_REAL_BFXS_REALTIME A , BM@BFDB D,SPXX@BFDB B,XSDD@BFDB S,MCDEF_LP@BFDB P ,BH_PL_PZ K,HT@BFDB T,"
+    		+ " WLDW@BFDB W WHERE A.DEPTID = D.DEPTID AND A.SP_ID = B.SP_ID AND D.XSDDID = S.XSDDID AND "
+    		+ " SUBSTR(D.BMDM,1,4)=P.BMDM AND SUBSTR(B.SPFL,1,6) = K.XL AND A.JZRQ = TO_DATE('"+strDate+"','yyyy/mm/dd') "
+    		+ " AND B.HTH=T.HTH AND T.GHDWDM=W.CODE ) GROUP BY JZRQ,SPCODE,NAME,XSSD1,XSSD2,DL,DLNAME,ZL, ZLNAME,XL,XLNAME,"
+    		+ " BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME,CODE,XSNR,SB,HTH ";
 		//正式
-		String sql = 
+		/*String sql = 
 				"INSERT INTO LP_REAL_BFXS_HZ(JZRQ,SPCODE,NAME,XSSD1,XSSD2,XSBS,XSJE,YHJE,XSSL,HYXS,YHJE_HY,HYBS,"
 				+ "DL,DLNAME,ZL,ZLNAME,XL, XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,SHOPID,SHOPNAME,XSML)  "
 				+"SELECT JZRQ,SPCODE,NAME,XSSD1,XSSD2,SUM(XSBS) XSBS,SUM(XSJE) XSJE,SUM(YHJE) YHJE,SUM(XSSL) XSSL,"
@@ -273,7 +334,7 @@ public void insertInto_LP_REAL_BFXS_HZ(String strDate){
 				+ "XSDD@BFDB S,MCDEF_LP@BFDB P ,BH_PL_PZ K WHERE A.DEPTID = D.DEPTID AND A.SP_ID = B.SP_ID AND "
 				+ "D.XSDDID = S.XSDDID AND SUBSTR(D.BMDM,1,4)=P.BMDM AND SUBSTR(B.SPFL,1,6) = K.XL AND "
 				+ "A.JZRQ = TO_DATE('"+strDate+"','yyyy/mm/dd') ) GROUP BY JZRQ,SPCODE,NAME,XSSD1,XSSD2,DL,DLNAME,ZL,"
-				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";
+				+ "ZLNAME,XL,XLNAME,BMDM,DEPT_NAME,XSDD,XSDDMC,OLD_MCID,MCNAME";*/
 	    //测试
 		/*String sql = 
 				"INSERT INTO LP_REAL_BFXS_HZ_TEST(JZRQ,SPCODE,NAME,XSSD1,XSSD2,XSBS,XSJE,YHJE,XSSL,HYXS,YHJE_HY,HYBS,"

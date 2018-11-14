@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.bbg.bhbi.service.Push_bh_exception_data;
 import com.bbg.bhbi.service.Push_bh_exception_data_new;
 import com.bbg.bhbi.service.Syn_LP_REAL_BFXS_HZ;
+import com.bbg.bhbi.service.Syn_LP_REAL_BFXS_HZ_bt;
 import com.bbg.pojo.BbgBhExceptionOne;
 import com.bbg.pojo.BbgBhExceptionTwo;
 import com.bbg.pojo.RK_RISK_INTERFACE;
@@ -28,6 +29,12 @@ public class AllTest {
 	@Autowired
 	Push_bh_exception_data_new push_bh_exception_data_new;
 	
+	@Autowired
+	Syn_LP_REAL_BFXS_HZ_bt syn_LP_REAL_BFXS_HZ_bt;
+	
+	@Autowired
+	Syn_LP_REAL_BFXS_HZ syn_LP_REAL_BFXS_HZ;
+	
 
 	
 	@Test
@@ -36,6 +43,13 @@ public class AllTest {
 		 push_bh_exception_data_new.insertRK_RISK_INTERFACE();
 		/*List<RK_RISK_INTERFACE> res = push_bh_exception_data_new.getRK_RISK_INTERFACE();
 		System.out.println(mapper.writeValueAsString(res));*/
+		System.out.println("over");
+	}
+	
+	@Test
+	public void test1() throws Exception {
+		//syn_LP_REAL_BFXS_HZ_bt.beginDeal();
+		syn_LP_REAL_BFXS_HZ.beginDeal();
 		System.out.println("over");
 	}
 	

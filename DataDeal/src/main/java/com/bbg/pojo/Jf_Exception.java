@@ -5,8 +5,15 @@ public class Jf_Exception {
 	private String id;
 	private String name;
 	private String note;
+	private String jtyc_id;
 	
 	
+	public String getJtyc_id() {
+		return jtyc_id;
+	}
+	public void setJtyc_id(String jtyc_id) {
+		this.jtyc_id = jtyc_id;
+	}
 	public String getName() {
 		return name;
 	}
